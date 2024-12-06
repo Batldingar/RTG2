@@ -194,73 +194,320 @@ void processInput(GLFWwindow *window)
 // renderCube() renders a 1x1 3D cube in NDC.
 // -------------------------------------------------
 unsigned int cubeVAO = 0;
-unsigned int cubeVBO = 0;
 
 void prepareCube()
 {
     // initialize (if necessary)
     if (cubeVAO == 0)
     {
-        float vertices[] = {
-            // position, normal, uv
-            // back face
-            -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-            1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,   // top-right
-            1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,  // bottom-right
-            1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,   // top-right
-            -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-            -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,  // top-left
-            // front face
-            -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom-left
-            1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,  // bottom-right
-            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,   // top-right
-            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,   // top-right
-            -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,  // top-left
-            -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom-left
-            // left face
-            -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,   // top-right
-            -1.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // top-left
-            -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-left
-            -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-left
-            -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  // bottom-right
-            -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,   // top-right
-                                                                // right face
-            1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,     // top-left
-            1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,   // bottom-right
-            1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,    // top-right
-            1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,   // bottom-right
-            1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,     // top-left
-            1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,    // bottom-left
-            // bottom face
-            -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // top-right
-            1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,  // top-left
-            1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,   // bottom-left
-            1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,   // bottom-left
-            -1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,  // bottom-right
-            -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // top-right
-            // top face
-            -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top-left
-            1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,   // bottom-right
-            1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,  // top-right
-            1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,   // bottom-right
-            -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top-left
-            -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f   // bottom-left
+        float positions[] = {
+            // Back face
+            -1.0f, -1.0f, -1.0f, // Vertex 1
+             1.0f, -1.0f, -1.0f, // Vertex 2
+             1.0f,  1.0f, -1.0f, // Vertex 3
+             1.0f,  1.0f, -1.0f, // Vertex 4
+            -1.0f,  1.0f, -1.0f, // Vertex 5
+            -1.0f, -1.0f, -1.0f, // Vertex 6
+
+            // Front face
+            -1.0f, -1.0f,  1.0f, // Vertex 7
+             1.0f, -1.0f,  1.0f, // Vertex 8
+             1.0f,  1.0f,  1.0f, // Vertex 9
+             1.0f,  1.0f,  1.0f, // Vertex 10
+            -1.0f,  1.0f,  1.0f, // Vertex 11
+            -1.0f, -1.0f,  1.0f, // Vertex 12
+
+            // Left face
+            -1.0f,  1.0f,  1.0f, // Vertex 13
+            -1.0f,  1.0f, -1.0f, // Vertex 14
+            -1.0f, -1.0f, -1.0f, // Vertex 15
+            -1.0f, -1.0f, -1.0f, // Vertex 16
+            -1.0f, -1.0f,  1.0f, // Vertex 17
+            -1.0f,  1.0f,  1.0f, // Vertex 18
+
+            // Right face
+             1.0f,  1.0f,  1.0f, // Vertex 19
+             1.0f, -1.0f, -1.0f, // Vertex 20
+             1.0f,  1.0f, -1.0f, // Vertex 21
+             1.0f, -1.0f, -1.0f, // Vertex 22
+             1.0f,  1.0f,  1.0f, // Vertex 23
+             1.0f, -1.0f,  1.0f, // Vertex 24
+
+             // Bottom face
+             -1.0f, -1.0f, -1.0f, // Vertex 25
+              1.0f, -1.0f, -1.0f, // Vertex 26
+              1.0f, -1.0f,  1.0f, // Vertex 27
+              1.0f, -1.0f,  1.0f, // Vertex 28
+             -1.0f, -1.0f,  1.0f, // Vertex 29
+             -1.0f, -1.0f, -1.0f, // Vertex 30
+
+             // Top face
+             -1.0f,  1.0f, -1.0f, // Vertex 31
+              1.0f,  1.0f, -1.0f, // Vertex 32
+              1.0f,  1.0f,  1.0f, // Vertex 33
+              1.0f,  1.0f,  1.0f, // Vertex 34
+             -1.0f,  1.0f,  1.0f, // Vertex 35
+             -1.0f,  1.0f, -1.0f  // Vertex 36
         };
+
+        float normals[] = {
+            // Back face normal points in negative Z direction
+            0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f,
+
+            // Front face normal points in positive Z direction
+            0.0f, 0.0f,  1.0f,
+            0.0f, 0.0f,  1.0f,
+            0.0f, 0.0f,  1.0f,
+            0.0f, 0.0f,  1.0f,
+            0.0f, 0.0f,  1.0f,
+            0.0f, 0.0f,  1.0f,
+
+            // Left face normal points in negative X direction
+           -1.0f, 0.0f,  0.0f,
+           -1.0f, 0.0f,  0.0f,
+           -1.0f, 0.0f,  0.0f,
+           -1.0f, 0.0f,  0.0f,
+           -1.0f, 0.0f,  0.0f,
+           -1.0f, 0.0f,  0.0f,
+
+           // Right face normal points in positive X direction
+           1.0f, 0.0f,  0.0f,
+           1.0f, 0.0f,  0.0f,
+           1.0f, 0.0f,  0.0f,
+           1.0f, 0.0f,  0.0f,
+           1.0f, 0.0f,  0.0f,
+           1.0f, 0.0f,  0.0f,
+
+           // Bottom face normal points in negative Y direction
+           0.0f, -1.0f, 0.0f,
+           0.0f, -1.0f, 0.0f,
+           0.0f, -1.0f, 0.0f,
+           0.0f, -1.0f, 0.0f,
+           0.0f, -1.0f, 0.0f,
+           0.0f, -1.0f, 0.0f,
+
+           // Top face normal points in positive Y direction
+           0.0f,  1.0f, 0.0f,
+           0.0f,  1.0f, 0.0f,
+           0.0f,  1.0f, 0.0f,
+           0.0f,  1.0f, 0.0f,
+           0.0f,  1.0f, 0.0f,
+           0.0f,  1.0f, 0.0f
+        };
+
+        float uvs[] = {
+            // Back face
+            0.0f, 0.0f,  // Vertex 1
+            1.0f, 0.0f,  // Vertex 2
+            1.0f, 1.0f,  // Vertex 3
+            1.0f, 1.0f,  // Vertex 4
+            0.0f, 1.0f,  // Vertex 5
+            0.0f, 0.0f,  // Vertex 6
+
+            // Front face
+            0.0f, 0.0f,  // Vertex 7
+            1.0f, 0.0f,  // Vertex 8
+            1.0f, 1.0f,  // Vertex 9
+            1.0f, 1.0f,  // Vertex 10
+            0.0f, 1.0f,  // Vertex 11
+            0.0f, 0.0f,  // Vertex 12
+
+            // Left face
+            0.0f, 0.0f,  // Vertex 13
+            1.0f, 0.0f,  // Vertex 14
+            1.0f, 1.0f,  // Vertex 15
+            1.0f, 1.0f,  // Vertex 16
+            0.0f, 1.0f,  // Vertex 17
+            0.0f, 0.0f,  // Vertex 18
+
+            // Right face
+            0.0f, 0.0f,  // Vertex 19
+            1.0f, 0.0f,  // Vertex 20
+            1.0f, 1.0f,  // Vertex 21
+            1.0f, 1.0f,  // Vertex 22
+            0.0f, 1.0f,  // Vertex 23
+            0.0f, 0.0f,  // Vertex 24
+
+            // Bottom face
+            0.0f, 0.0f,  // Vertex 25
+            1.0f, 0.0f,  // Vertex 26
+            1.0f, 1.0f,  // Vertex 27
+            1.0f, 1.0f,  // Vertex 28
+            0.0f, 1.0f,  // Vertex 29
+            0.0f, 0.0f,  // Vertex 30
+
+            // Top face
+            0.0f, 0.0f,  // Vertex 31
+            1.0f, 0.0f,  // Vertex 32
+            1.0f, 1.0f,  // Vertex 33
+            1.0f, 1.0f,  // Vertex 34
+            0.0f, 1.0f,  // Vertex 35
+            0.0f, 0.0f   // Vertex 36
+        };
+
+        // Define color (one color per cube, use same color for all vertices)
+        float colors[] = {
+            // Color per cube (same color for all vertices)
+            1.0f, 0.0f, 0.0f,  // Vertex 1
+            1.0f, 0.0f, 0.0f,  // Vertex 2
+            1.0f, 0.0f, 0.0f,  // Vertex 3
+            1.0f, 0.0f, 0.0f,  // Vertex 4
+            1.0f, 0.0f, 0.0f,  // Vertex 5
+            1.0f, 0.0f, 0.0f,  // Vertex 6
+
+            1.0f, 0.0f, 0.0f,  // Vertex 7
+            1.0f, 0.0f, 0.0f,  // Vertex 8
+            1.0f, 0.0f, 0.0f,  // Vertex 9
+            1.0f, 0.0f, 0.0f,  // Vertex 10
+            1.0f, 0.0f, 0.0f,  // Vertex 11
+            1.0f, 0.0f, 0.0f,  // Vertex 12
+
+            1.0f, 0.0f, 0.0f,  // Vertex 13
+            1.0f, 0.0f, 0.0f,  // Vertex 14
+            1.0f, 0.0f, 0.0f,  // Vertex 15
+            1.0f, 0.0f, 0.0f,  // Vertex 16
+            1.0f, 0.0f, 0.0f,  // Vertex 17
+            1.0f, 0.0f, 0.0f,  // Vertex 18
+
+            1.0f, 0.0f, 0.0f,  // Vertex 19
+            1.0f, 0.0f, 0.0f,  // Vertex 20
+            1.0f, 0.0f, 0.0f,  // Vertex 21
+            1.0f, 0.0f, 0.0f,  // Vertex 22
+            1.0f, 0.0f, 0.0f,  // Vertex 23
+            1.0f, 0.0f, 0.0f,  // Vertex 24
+
+            1.0f, 0.0f, 0.0f,  // Vertex 25
+            1.0f, 0.0f, 0.0f,  // Vertex 26
+            1.0f, 0.0f, 0.0f,  // Vertex 27
+            1.0f, 0.0f, 0.0f,  // Vertex 28
+            1.0f, 0.0f, 0.0f,  // Vertex 29
+            1.0f, 0.0f, 0.0f,  // Vertex 30
+
+            1.0f, 0.0f, 0.0f,  // Vertex 31
+            1.0f, 0.0f, 0.0f,  // Vertex 32
+            1.0f, 0.0f, 0.0f,  // Vertex 33
+            1.0f, 0.0f, 0.0f,  // Vertex 34
+            1.0f, 0.0f, 0.0f,  // Vertex 35
+            1.0f, 0.0f, 0.0f   // Vertex 36
+        };
+
+        float offsets[] = {
+            // Back face
+            0.0f, 0.0f, 0.0f, // Vertex 1
+            0.0f, 0.0f, 0.0f, // Vertex 2
+            0.0f, 0.0f, 0.0f, // Vertex 3
+            0.0f, 0.0f, 0.0f, // Vertex 4
+            0.0f, 0.0f, 0.0f, // Vertex 5
+            0.0f, 0.0f, 0.0f, // Vertex 6
+
+            // Front face
+            0.0f, 0.0f, 0.0f, // Vertex 7
+            0.0f, 0.0f, 0.0f, // Vertex 8
+            0.0f, 0.0f, 0.0f, // Vertex 9
+            0.0f, 0.0f, 0.0f, // Vertex 10
+            0.0f, 0.0f, 0.0f, // Vertex 11
+            0.0f, 0.0f, 0.0f, // Vertex 12
+
+            // Left face
+            0.0f, 0.0f, 0.0f, // Vertex 13
+            0.0f, 0.0f, 0.0f, // Vertex 14
+            0.0f, 0.0f, 0.0f, // Vertex 15
+            0.0f, 0.0f, 0.0f, // Vertex 16
+            0.0f, 0.0f, 0.0f, // Vertex 17
+            0.0f, 0.0f, 0.0f, // Vertex 18
+
+            // Right face
+            0.0f, 0.0f, 0.0f, // Vertex 19
+            0.0f, 0.0f, 0.0f, // Vertex 20
+            0.0f, 0.0f, 0.0f, // Vertex 21
+            0.0f, 0.0f, 0.0f, // Vertex 22
+            0.0f, 0.0f, 0.0f, // Vertex 23
+            0.0f, 0.0f, 0.0f, // Vertex 24
+
+            // Bottom face
+            0.0f, 0.0f, 0.0f, // Vertex 25
+            0.0f, 0.0f, 0.0f, // Vertex 26
+            0.0f, 0.0f, 0.0f, // Vertex 27
+            0.0f, 0.0f, 0.0f, // Vertex 28
+            0.0f, 0.0f, 0.0f, // Vertex 29
+            0.0f, 0.0f, 0.0f, // Vertex 30
+
+            // Top face
+            0.0f, 0.0f, 0.0f, // Vertex 31
+            0.0f, 0.0f, 0.0f, // Vertex 32
+            0.0f, 0.0f, 0.0f, // Vertex 33
+            0.0f, 0.0f, 0.0f, // Vertex 34
+            0.0f, 0.0f, 0.0f, // Vertex 35
+            0.0f, 0.0f, 0.0f  // Vertex 36
+        };
+
+
+        // ----- VBO CREATION -----
+        GLuint positionVBO, normalVBO, uvVBO, colorVBO, offsetVBO;
+
+        // Position VBO
+        glGenBuffers(1, &positionVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+
+        // Normal VBO
+        glGenBuffers(1, &normalVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+
+        // UV VBO
+        glGenBuffers(1, &uvVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, uvVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
+
+        // Color VBO
+        glGenBuffers(1, &colorVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+
+        // Offset VBO
+        glGenBuffers(1, &offsetVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(offsets), offsets, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind
+
+        // ----- VAO CREATION -----
         glGenVertexArrays(1, &cubeVAO);
-        glGenBuffers(1, &cubeVBO);
-        // fill buffer
-        glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-        // link vertex attributes
         glBindVertexArray(cubeVAO);
+
+        // Positions (location = 0)
+        glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        // Normals (location = 1)
+        glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        // UVs (location = 2)
+        glBindBuffer(GL_ARRAY_BUFFER, uvVBO);
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+        // Colors (location = 3)
+        glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        // Offsets (location = 4)
+        glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind VBO
+        glBindVertexArray(0); // Unbind VAO
     }
 }
 

@@ -5,9 +5,8 @@ out vec4 fragColor;
 in vec3 normal;
 in vec2 texCoord;
 in vec3 fragPos;
+in vec3 vColor;
 
-
-uniform vec3 objectColor;
 uniform vec3 lightPos;
 uniform vec3 cameraPos;
 uniform sampler2D texture_diffuse1;
@@ -35,5 +34,5 @@ void main()
 
 	vec3 result = (ambient + diffuse + specular);
 
-	fragColor = vec4(objectColor, 1.0) * vec4(result, 1.0);
+	fragColor = vec4(vColor, 1.0);
 }
