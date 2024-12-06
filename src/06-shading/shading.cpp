@@ -23,7 +23,7 @@ using namespace glm;
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void prepareCubes();
-void renderCube();
+void renderCubes();
 
 int WIDTH = 800;
 int HEIGHT = 600;
@@ -58,12 +58,7 @@ void loadTexture()
     stbi_set_flip_vertically_on_load(true); // this flips the loaded images vertically
     image = stbi_load("../resources/images/klein.jpg", &width, &height, &nrComponents, 0);
 
-    if (image)
-    {
-
-        stbi_image_free(image);
-    }
-    else
+    if (!image)
     {
         std::cout << "Failed to load texture" << std::endl;
     }
@@ -71,8 +66,6 @@ void loadTexture()
 
 int main()
 {
-    loadTexture();
-
     InitWindowAndGUI(WIDTH, HEIGHT, APP_NAME);
     SetFramebufferSizeCallback(framebuffer_size_callback);
 
@@ -131,14 +124,10 @@ int main()
         glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
                 mat4 model = mat4(1.0f);
                 // model = rotate(model, (float)glfwGetTime(), vec3(1.0f, 0.0f, 0.0f));
                 model = rotate(model, 0.0f, vec3(1.0f, 0.0f, 0.0f));
-                model = translate(model, vec3(x, y, 0.0f));
+                model = translate(model, vec3(0.0f, 0.0f, 0.0f));
                 model = scale(model, vec3(0.2f, 0.2f, 0.2f));
 
                 myShader.setMat4("projection", projection);
@@ -147,11 +136,8 @@ int main()
 
                 myShader.setVec3("cameraPos", cameraPos);
                 myShader.setVec3("lightPos", lightPos);
-                myShader.setVec3("objectColor", objectColor);
 
-                renderCube();
-            }
-        }
+                renderCubes();
 
         if (gui)
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -159,6 +145,7 @@ int main()
         glfwPollEvents();
     }
 
+    stbi_image_free(image);
     DestroyWindow();
     return 0;
 }
@@ -197,13 +184,13 @@ void processInput(GLFWwindow *window)
 
 // renderCube() renders a 1x1 3D cube in NDC.
 // -------------------------------------------------
-unsigned int cubeVAO = 0;
+std::vector<unsigned int> cubeVAOS;
 
 void prepareCubes()
 {
-    // initialize (if necessary)
-    if (cubeVAO == 0)
-    {
+    loadTexture();
+    cubeVAOS.resize(width * height, 0);
+
         float positions[] = {
             // Back face
             -1.0f, -1.0f, -1.0f, // Vertex 1
@@ -353,98 +340,106 @@ void prepareCubes()
             0.0f, 0.0f  // Vertex 36
         };
 
-        // Create the color array
-        float colors[vertexCount * colorComponentsPerVertex] = {};
+        for (int i = 0; i < width * height; ++i) {
 
-        float xColor = 0.0f, yColor = 1.0f, zColor = 0.0f;
+            // Create the color array
+            float colors[vertexCount * colorComponentsPerVertex] = {};
 
-        for (int i = 0; i < vertexCount; ++i) {
-            colors[i * colorComponentsPerVertex] = xColor;
-            colors[i * colorComponentsPerVertex + 1] = yColor;
-            colors[i * colorComponentsPerVertex + 2] = zColor;
+            // Calculate the RGB values from the image
+            unsigned char r = image[i * 3];     // Red channel
+            unsigned char g = image[i * 3 + 1]; // Green channel
+            unsigned char b = image[i * 3 + 2]; // Blue channel
+
+            for (int i = 0; i < vertexCount; ++i) {
+                colors[i * colorComponentsPerVertex] = r / 255.0f;
+                colors[i * colorComponentsPerVertex + 1] = g / 255.0f;
+                colors[i * colorComponentsPerVertex + 2] = b / 255.0f;
+            }
+
+            float offsets[vertexCount * offsetComponentsPerVertex] = {};
+
+            // Create the offset array
+            float xOffset = (float)(i % width) * 3.0f;  // Get the remainder as a float
+            float yOffset = (float)(i / width) * 3.0f; // Integer division gives the row number, cast to float
+            float zOffset = 0.0f;
+
+            for (int i = 0; i < vertexCount; ++i) {
+                offsets[i * offsetComponentsPerVertex] = xOffset;
+                offsets[i * offsetComponentsPerVertex + 1] = yOffset;
+                offsets[i * offsetComponentsPerVertex + 2] = zOffset;
+            }
+
+            // ----- VBO CREATION -----
+            GLuint positionVBO, normalVBO, uvVBO, colorVBO, offsetVBO;
+
+            // Position VBO
+            glGenBuffers(1, &positionVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+
+            // Normal VBO
+            glGenBuffers(1, &normalVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+
+            // UV VBO
+            glGenBuffers(1, &uvVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, uvVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
+
+            // Color VBO
+            glGenBuffers(1, &colorVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+
+            // Offset VBO
+            glGenBuffers(1, &offsetVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(offsets), offsets, GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind
+
+            // ----- VAO CREATION -----
+            glGenVertexArrays(1, &cubeVAOS[i]);
+            glBindVertexArray(cubeVAOS[i]);
+
+            // Positions (location = 0)
+            glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+            // Normals (location = 1)
+            glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+            // UVs (location = 2)
+            glBindBuffer(GL_ARRAY_BUFFER, uvVBO);
+            glEnableVertexAttribArray(2);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+            // Colors (location = 3)
+            glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+            glEnableVertexAttribArray(3);
+            glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+            // Offsets (location = 4)
+            glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
+            glEnableVertexAttribArray(4);
+            glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind VBO
+            glBindVertexArray(0);             // Unbind VAO
         }
-
-        float offsets[vertexCount * offsetComponentsPerVertex] = {};
-
-        // Create the offset array
-        float xOffset = 0.0f, yOffset = 0.0f, zOffset = 0.0f;
-
-        for (int i = 0; i < vertexCount; ++i) {
-            offsets[i * offsetComponentsPerVertex] = xOffset;
-            offsets[i * offsetComponentsPerVertex + 1] = yOffset;
-            offsets[i * offsetComponentsPerVertex + 2] = zOffset;
-        }
-
-        // ----- VBO CREATION -----
-        GLuint positionVBO, normalVBO, uvVBO, colorVBO, offsetVBO;
-
-        // Position VBO
-        glGenBuffers(1, &positionVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
-
-        // Normal VBO
-        glGenBuffers(1, &normalVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-
-        // UV VBO
-        glGenBuffers(1, &uvVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, uvVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
-
-        // Color VBO
-        glGenBuffers(1, &colorVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-
-        // Offset VBO
-        glGenBuffers(1, &offsetVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(offsets), offsets, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind
-
-        // ----- VAO CREATION -----
-        glGenVertexArrays(1, &cubeVAO);
-        glBindVertexArray(cubeVAO);
-
-        // Positions (location = 0)
-        glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-
-        // Normals (location = 1)
-        glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-
-        // UVs (location = 2)
-        glBindBuffer(GL_ARRAY_BUFFER, uvVBO);
-        glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0);
-
-        // Colors (location = 3)
-        glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-
-        // Offsets (location = 4)
-        glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
-        glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind VBO
-        glBindVertexArray(0);             // Unbind VAO
-    }
 }
 
-void renderCube()
+void renderCubes()
 {
-    // render Cube
-    glBindVertexArray(cubeVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
+    for (int i = 0; i < width * height; ++i) {
+        glBindVertexArray(cubeVAOS[i]);
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        glBindVertexArray(0);
+    }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
