@@ -14,11 +14,15 @@
 #include <util/model.h>
 #include <util/window.h>
 
+constexpr int vertexCount = 36;
+constexpr int colorComponentsPerVertex = 3;
+constexpr int offsetComponentsPerVertex = 3;
+
 using namespace glm;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
-void prepareCube();
+void prepareCubes();
 void renderCube();
 
 int WIDTH = 800;
@@ -78,7 +82,7 @@ int main()
 
     myShader.use();
 
-    prepareCube();
+    prepareCubes();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -195,7 +199,7 @@ void processInput(GLFWwindow *window)
 // -------------------------------------------------
 unsigned int cubeVAO = 0;
 
-void prepareCube()
+void prepareCubes()
 {
     // initialize (if necessary)
     if (cubeVAO == 0)
@@ -349,101 +353,27 @@ void prepareCube()
             0.0f, 0.0f  // Vertex 36
         };
 
-        // Define color (one color per cube, use same color for all vertices)
-        float colors[] = {
-            // Color per cube (same color for all vertices)
-            1.0f, 0.0f, 0.0f, // Vertex 1
-            1.0f, 0.0f, 0.0f, // Vertex 2
-            1.0f, 0.0f, 0.0f, // Vertex 3
-            1.0f, 0.0f, 0.0f, // Vertex 4
-            1.0f, 0.0f, 0.0f, // Vertex 5
-            1.0f, 0.0f, 0.0f, // Vertex 6
+        // Create the color array
+        float colors[vertexCount * colorComponentsPerVertex] = {};
 
-            1.0f, 0.0f, 0.0f, // Vertex 7
-            1.0f, 0.0f, 0.0f, // Vertex 8
-            1.0f, 0.0f, 0.0f, // Vertex 9
-            1.0f, 0.0f, 0.0f, // Vertex 10
-            1.0f, 0.0f, 0.0f, // Vertex 11
-            1.0f, 0.0f, 0.0f, // Vertex 12
+        float xColor = 0.0f, yColor = 1.0f, zColor = 0.0f;
 
-            1.0f, 0.0f, 0.0f, // Vertex 13
-            1.0f, 0.0f, 0.0f, // Vertex 14
-            1.0f, 0.0f, 0.0f, // Vertex 15
-            1.0f, 0.0f, 0.0f, // Vertex 16
-            1.0f, 0.0f, 0.0f, // Vertex 17
-            1.0f, 0.0f, 0.0f, // Vertex 18
+        for (int i = 0; i < vertexCount; ++i) {
+            colors[i * colorComponentsPerVertex] = xColor;
+            colors[i * colorComponentsPerVertex + 1] = yColor;
+            colors[i * colorComponentsPerVertex + 2] = zColor;
+        }
 
-            1.0f, 0.0f, 0.0f, // Vertex 19
-            1.0f, 0.0f, 0.0f, // Vertex 20
-            1.0f, 0.0f, 0.0f, // Vertex 21
-            1.0f, 0.0f, 0.0f, // Vertex 22
-            1.0f, 0.0f, 0.0f, // Vertex 23
-            1.0f, 0.0f, 0.0f, // Vertex 24
+        float offsets[vertexCount * offsetComponentsPerVertex] = {};
 
-            1.0f, 0.0f, 0.0f, // Vertex 25
-            1.0f, 0.0f, 0.0f, // Vertex 26
-            1.0f, 0.0f, 0.0f, // Vertex 27
-            1.0f, 0.0f, 0.0f, // Vertex 28
-            1.0f, 0.0f, 0.0f, // Vertex 29
-            1.0f, 0.0f, 0.0f, // Vertex 30
+        // Create the offset array
+        float xOffset = 0.0f, yOffset = 0.0f, zOffset = 0.0f;
 
-            1.0f, 0.0f, 0.0f, // Vertex 31
-            1.0f, 0.0f, 0.0f, // Vertex 32
-            1.0f, 0.0f, 0.0f, // Vertex 33
-            1.0f, 0.0f, 0.0f, // Vertex 34
-            1.0f, 0.0f, 0.0f, // Vertex 35
-            1.0f, 0.0f, 0.0f  // Vertex 36
-        };
-
-        float offsets[] = {
-            // Back face
-            0.0f, 0.0f, 0.0f, // Vertex 1
-            0.0f, 0.0f, 0.0f, // Vertex 2
-            0.0f, 0.0f, 0.0f, // Vertex 3
-            0.0f, 0.0f, 0.0f, // Vertex 4
-            0.0f, 0.0f, 0.0f, // Vertex 5
-            0.0f, 0.0f, 0.0f, // Vertex 6
-
-            // Front face
-            0.0f, 0.0f, 0.0f, // Vertex 7
-            0.0f, 0.0f, 0.0f, // Vertex 8
-            0.0f, 0.0f, 0.0f, // Vertex 9
-            0.0f, 0.0f, 0.0f, // Vertex 10
-            0.0f, 0.0f, 0.0f, // Vertex 11
-            0.0f, 0.0f, 0.0f, // Vertex 12
-
-            // Left face
-            0.0f, 0.0f, 0.0f, // Vertex 13
-            0.0f, 0.0f, 0.0f, // Vertex 14
-            0.0f, 0.0f, 0.0f, // Vertex 15
-            0.0f, 0.0f, 0.0f, // Vertex 16
-            0.0f, 0.0f, 0.0f, // Vertex 17
-            0.0f, 0.0f, 0.0f, // Vertex 18
-
-            // Right face
-            0.0f, 0.0f, 0.0f, // Vertex 19
-            0.0f, 0.0f, 0.0f, // Vertex 20
-            0.0f, 0.0f, 0.0f, // Vertex 21
-            0.0f, 0.0f, 0.0f, // Vertex 22
-            0.0f, 0.0f, 0.0f, // Vertex 23
-            0.0f, 0.0f, 0.0f, // Vertex 24
-
-            // Bottom face
-            0.0f, 0.0f, 0.0f, // Vertex 25
-            0.0f, 0.0f, 0.0f, // Vertex 26
-            0.0f, 0.0f, 0.0f, // Vertex 27
-            0.0f, 0.0f, 0.0f, // Vertex 28
-            0.0f, 0.0f, 0.0f, // Vertex 29
-            0.0f, 0.0f, 0.0f, // Vertex 30
-
-            // Top face
-            0.0f, 0.0f, 0.0f, // Vertex 31
-            0.0f, 0.0f, 0.0f, // Vertex 32
-            0.0f, 0.0f, 0.0f, // Vertex 33
-            0.0f, 0.0f, 0.0f, // Vertex 34
-            0.0f, 0.0f, 0.0f, // Vertex 35
-            0.0f, 0.0f, 0.0f  // Vertex 36
-        };
+        for (int i = 0; i < vertexCount; ++i) {
+            offsets[i * offsetComponentsPerVertex] = xOffset;
+            offsets[i * offsetComponentsPerVertex + 1] = yOffset;
+            offsets[i * offsetComponentsPerVertex + 2] = zOffset;
+        }
 
         // ----- VBO CREATION -----
         GLuint positionVBO, normalVBO, uvVBO, colorVBO, offsetVBO;
