@@ -1,0 +1,4 @@
+C:\Users\baldi\Documents\fh_master\semester_1\RTG\exercises\exercise_06\VS\x64\Debug\glfw3.dll
+C:\Users\baldi\Documents\fh_master\semester_1\RTG\exercises\exercise_06\VS\06-shading\x64\Debug\06-shadi.2AA623AA.Up2Date
+C:\Users\baldi\Documents\fh_master\semester_1\RTG\exercises\submission_02\RTG2\VS\x64\Debug\glfw3.dll
+C:\Users\baldi\Documents\fh_master\semester_1\RTG\exercises\submission_02\RTG2\VS\06-shading\x64\Debug\06-shadi.2AA623AA.Up2Date

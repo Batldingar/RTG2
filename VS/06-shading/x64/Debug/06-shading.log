@@ -1,0 +1,6 @@
+﻿  shading.cpp
+C:\Users\baldi\Documents\fh_master\semester_1\RTG\exercises\submission_02\RTG2\src\06-shading\shading.cpp(134,23): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+  LINK : C:\Users\baldi\Documents\fh_master\semester_1\RTG\exercises\submission_02\RTG2\VS\x64\Debug\06-shading.exe wurde nicht gefunden oder beim letzten inkrementellen Linkvorgang nicht erstellt; vollständiger Link wird durchgeführt.
+  06-shading.vcxproj -> C:\Users\baldi\Documents\fh_master\semester_1\RTG\exercises\submission_02\RTG2\VS\x64\Debug\06-shading.exe
+  Der Befehl "pwsh.exe" ist entweder falsch geschrieben oder
+  konnte nicht gefunden werden.
