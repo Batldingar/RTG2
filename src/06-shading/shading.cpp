@@ -40,6 +40,46 @@ bool mPressed = false;
 
 const char *APP_NAME = "shading";
 
+unsigned int texture;
+
+void loadTexture()
+{
+
+    // Step 1: Generate a texture
+    glGenTextures(1, &texture);
+    // Step 2: Bind the texture
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    int width, height, nrComponents;
+    stbi_set_flip_vertically_on_load(true); // this flips the loaded images vertically
+    unsigned char *image = stbi_load("../resources/images/regenbogen.jpg", &width, &height, &nrComponents, 0);
+
+    if (image)
+    {
+        std::cout << "Image of size " << width << "x" << height << " and " << nrComponents << " channels loaded!" << std::endl;
+
+        // Step 3: Create a texture object in OpenGL
+        if (nrComponents == 3)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+                         GL_RGB, GL_UNSIGNED_BYTE, image);
+        }
+        if (nrComponents == 4)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+                         GL_RGBA, GL_UNSIGNED_BYTE, image);
+        }
+
+        stbi_image_free(image);
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+}
+
 int main()
 {
 
