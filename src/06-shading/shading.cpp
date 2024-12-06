@@ -18,6 +18,7 @@ using namespace glm;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+void prepareCube();
 void renderCube();
 
 int WIDTH = 800;
@@ -42,29 +43,19 @@ const char *APP_NAME = "shading";
 
 unsigned int texture;
 
+unsigned char *image;
+
+int width, height;
+
 void loadTexture()
 {
 
-    int width, height, nrComponents;
+    int nrComponents;
     stbi_set_flip_vertically_on_load(true); // this flips the loaded images vertically
-    unsigned char *image = stbi_load("../resources/images/regenbogen.jpg", &width, &height, &nrComponents, 0);
+    image = stbi_load("../resources/images/2.jpg", &width, &height, &nrComponents, 0);
 
     if (image)
     {
-
-        // Loop through each pixel
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                int index = (y * width + x) * nrComponents;
-                unsigned char r = image[index];     // Red
-                unsigned char g = image[index + 1]; // Green
-                unsigned char b = image[index + 2]; // Blue
-
-                printf("Pixel (%d, %d): R=%d, G=%d, B=%d\n", x, y, r, g, b);
-            }
-        }
 
         stbi_image_free(image);
     }
@@ -86,6 +77,8 @@ int main()
     glm::vec3 objectColor = {0.9, 0.7, 0.1};
 
     myShader.use();
+
+    prepareCube();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -134,20 +127,27 @@ int main()
         glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        mat4 model = mat4(1.0f);
-        model = rotate(model, (float)glfwGetTime(), vec3(1.0f, 0.0f, 0.0f));
-        model = translate(model, vec3(0.0f, 0.0f, 0.0f));
-        model = scale(model, vec3(0.2f, 0.2f, 0.2f));
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                mat4 model = mat4(1.0f);
+                // model = rotate(model, (float)glfwGetTime(), vec3(1.0f, 0.0f, 0.0f));
+                model = rotate(model, 0.0f, vec3(1.0f, 0.0f, 0.0f));
+                model = translate(model, vec3(x, y, 0.0f));
+                model = scale(model, vec3(0.2f, 0.2f, 0.2f));
 
-        myShader.setMat4("projection", projection);
-        myShader.setMat4("view", view);
-        myShader.setMat4("model", model);
+                myShader.setMat4("projection", projection);
+                myShader.setMat4("view", view);
+                myShader.setMat4("model", model);
 
-        myShader.setVec3("cameraPos", cameraPos);
-        myShader.setVec3("lightPos", lightPos);
-        myShader.setVec3("objectColor", objectColor);
+                myShader.setVec3("cameraPos", cameraPos);
+                myShader.setVec3("lightPos", lightPos);
+                myShader.setVec3("objectColor", objectColor);
 
-        renderCube();
+                renderCube();
+            }
+        }
 
         if (gui)
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -195,7 +195,8 @@ void processInput(GLFWwindow *window)
 // -------------------------------------------------
 unsigned int cubeVAO = 0;
 unsigned int cubeVBO = 0;
-void renderCube()
+
+void prepareCube()
 {
     // initialize (if necessary)
     if (cubeVAO == 0)
@@ -261,6 +262,10 @@ void renderCube()
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
+}
+
+void renderCube()
+{
     // render Cube
     glBindVertexArray(cubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
