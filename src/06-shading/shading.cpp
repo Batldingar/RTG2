@@ -45,34 +45,28 @@ unsigned int texture;
 void loadTexture()
 {
 
-    // Step 1: Generate a texture
-    glGenTextures(1, &texture);
-    // Step 2: Bind the texture
-    glBindTexture(GL_TEXTURE_2D, texture);
-
     int width, height, nrComponents;
     stbi_set_flip_vertically_on_load(true); // this flips the loaded images vertically
     unsigned char *image = stbi_load("../resources/images/regenbogen.jpg", &width, &height, &nrComponents, 0);
 
     if (image)
     {
-        std::cout << "Image of size " << width << "x" << height << " and " << nrComponents << " channels loaded!" << std::endl;
 
-        // Step 3: Create a texture object in OpenGL
-        if (nrComponents == 3)
+        // Loop through each pixel
+        for (int y = 0; y < height; y++)
         {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-                         GL_RGB, GL_UNSIGNED_BYTE, image);
-        }
-        if (nrComponents == 4)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-                         GL_RGBA, GL_UNSIGNED_BYTE, image);
+            for (int x = 0; x < width; x++)
+            {
+                int index = (y * width + x) * nrComponents;
+                unsigned char r = image[index];     // Red
+                unsigned char g = image[index + 1]; // Green
+                unsigned char b = image[index + 2]; // Blue
+
+                printf("Pixel (%d, %d): R=%d, G=%d, B=%d\n", x, y, r, g, b);
+            }
         }
 
         stbi_image_free(image);
-
-        glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
     {
@@ -82,6 +76,7 @@ void loadTexture()
 
 int main()
 {
+    loadTexture();
 
     InitWindowAndGUI(WIDTH, HEIGHT, APP_NAME);
     SetFramebufferSizeCallback(framebuffer_size_callback);
