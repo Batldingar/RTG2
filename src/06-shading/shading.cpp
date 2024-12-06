@@ -52,7 +52,7 @@ void loadTexture()
 
     int nrComponents;
     stbi_set_flip_vertically_on_load(true); // this flips the loaded images vertically
-    image = stbi_load("../resources/images/2.jpg", &width, &height, &nrComponents, 0);
+    image = stbi_load("../resources/images/klein.jpg", &width, &height, &nrComponents, 0);
 
     if (image)
     {
@@ -203,51 +203,51 @@ void prepareCube()
         float positions[] = {
             // Back face
             -1.0f, -1.0f, -1.0f, // Vertex 1
-             1.0f, -1.0f, -1.0f, // Vertex 2
-             1.0f,  1.0f, -1.0f, // Vertex 3
-             1.0f,  1.0f, -1.0f, // Vertex 4
-            -1.0f,  1.0f, -1.0f, // Vertex 5
+            1.0f, -1.0f, -1.0f,  // Vertex 2
+            1.0f, 1.0f, -1.0f,   // Vertex 3
+            1.0f, 1.0f, -1.0f,   // Vertex 4
+            -1.0f, 1.0f, -1.0f,  // Vertex 5
             -1.0f, -1.0f, -1.0f, // Vertex 6
 
             // Front face
-            -1.0f, -1.0f,  1.0f, // Vertex 7
-             1.0f, -1.0f,  1.0f, // Vertex 8
-             1.0f,  1.0f,  1.0f, // Vertex 9
-             1.0f,  1.0f,  1.0f, // Vertex 10
-            -1.0f,  1.0f,  1.0f, // Vertex 11
-            -1.0f, -1.0f,  1.0f, // Vertex 12
+            -1.0f, -1.0f, 1.0f, // Vertex 7
+            1.0f, -1.0f, 1.0f,  // Vertex 8
+            1.0f, 1.0f, 1.0f,   // Vertex 9
+            1.0f, 1.0f, 1.0f,   // Vertex 10
+            -1.0f, 1.0f, 1.0f,  // Vertex 11
+            -1.0f, -1.0f, 1.0f, // Vertex 12
 
             // Left face
-            -1.0f,  1.0f,  1.0f, // Vertex 13
-            -1.0f,  1.0f, -1.0f, // Vertex 14
+            -1.0f, 1.0f, 1.0f,   // Vertex 13
+            -1.0f, 1.0f, -1.0f,  // Vertex 14
             -1.0f, -1.0f, -1.0f, // Vertex 15
             -1.0f, -1.0f, -1.0f, // Vertex 16
-            -1.0f, -1.0f,  1.0f, // Vertex 17
-            -1.0f,  1.0f,  1.0f, // Vertex 18
+            -1.0f, -1.0f, 1.0f,  // Vertex 17
+            -1.0f, 1.0f, 1.0f,   // Vertex 18
 
             // Right face
-             1.0f,  1.0f,  1.0f, // Vertex 19
-             1.0f, -1.0f, -1.0f, // Vertex 20
-             1.0f,  1.0f, -1.0f, // Vertex 21
-             1.0f, -1.0f, -1.0f, // Vertex 22
-             1.0f,  1.0f,  1.0f, // Vertex 23
-             1.0f, -1.0f,  1.0f, // Vertex 24
+            1.0f, 1.0f, 1.0f,   // Vertex 19
+            1.0f, -1.0f, -1.0f, // Vertex 20
+            1.0f, 1.0f, -1.0f,  // Vertex 21
+            1.0f, -1.0f, -1.0f, // Vertex 22
+            1.0f, 1.0f, 1.0f,   // Vertex 23
+            1.0f, -1.0f, 1.0f,  // Vertex 24
 
-             // Bottom face
-             -1.0f, -1.0f, -1.0f, // Vertex 25
-              1.0f, -1.0f, -1.0f, // Vertex 26
-              1.0f, -1.0f,  1.0f, // Vertex 27
-              1.0f, -1.0f,  1.0f, // Vertex 28
-             -1.0f, -1.0f,  1.0f, // Vertex 29
-             -1.0f, -1.0f, -1.0f, // Vertex 30
+            // Bottom face
+            -1.0f, -1.0f, -1.0f, // Vertex 25
+            1.0f, -1.0f, -1.0f,  // Vertex 26
+            1.0f, -1.0f, 1.0f,   // Vertex 27
+            1.0f, -1.0f, 1.0f,   // Vertex 28
+            -1.0f, -1.0f, 1.0f,  // Vertex 29
+            -1.0f, -1.0f, -1.0f, // Vertex 30
 
-             // Top face
-             -1.0f,  1.0f, -1.0f, // Vertex 31
-              1.0f,  1.0f, -1.0f, // Vertex 32
-              1.0f,  1.0f,  1.0f, // Vertex 33
-              1.0f,  1.0f,  1.0f, // Vertex 34
-             -1.0f,  1.0f,  1.0f, // Vertex 35
-             -1.0f,  1.0f, -1.0f  // Vertex 36
+            // Top face
+            -1.0f, 1.0f, -1.0f, // Vertex 31
+            1.0f, 1.0f, -1.0f,  // Vertex 32
+            1.0f, 1.0f, 1.0f,   // Vertex 33
+            1.0f, 1.0f, 1.0f,   // Vertex 34
+            -1.0f, 1.0f, 1.0f,  // Vertex 35
+            -1.0f, 1.0f, -1.0f  // Vertex 36
         };
 
         float normals[] = {
@@ -260,140 +260,139 @@ void prepareCube()
             0.0f, 0.0f, -1.0f,
 
             // Front face normal points in positive Z direction
-            0.0f, 0.0f,  1.0f,
-            0.0f, 0.0f,  1.0f,
-            0.0f, 0.0f,  1.0f,
-            0.0f, 0.0f,  1.0f,
-            0.0f, 0.0f,  1.0f,
-            0.0f, 0.0f,  1.0f,
+            0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f,
 
             // Left face normal points in negative X direction
-           -1.0f, 0.0f,  0.0f,
-           -1.0f, 0.0f,  0.0f,
-           -1.0f, 0.0f,  0.0f,
-           -1.0f, 0.0f,  0.0f,
-           -1.0f, 0.0f,  0.0f,
-           -1.0f, 0.0f,  0.0f,
+            -1.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f,
 
-           // Right face normal points in positive X direction
-           1.0f, 0.0f,  0.0f,
-           1.0f, 0.0f,  0.0f,
-           1.0f, 0.0f,  0.0f,
-           1.0f, 0.0f,  0.0f,
-           1.0f, 0.0f,  0.0f,
-           1.0f, 0.0f,  0.0f,
+            // Right face normal points in positive X direction
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
 
-           // Bottom face normal points in negative Y direction
-           0.0f, -1.0f, 0.0f,
-           0.0f, -1.0f, 0.0f,
-           0.0f, -1.0f, 0.0f,
-           0.0f, -1.0f, 0.0f,
-           0.0f, -1.0f, 0.0f,
-           0.0f, -1.0f, 0.0f,
+            // Bottom face normal points in negative Y direction
+            0.0f, -1.0f, 0.0f,
+            0.0f, -1.0f, 0.0f,
+            0.0f, -1.0f, 0.0f,
+            0.0f, -1.0f, 0.0f,
+            0.0f, -1.0f, 0.0f,
+            0.0f, -1.0f, 0.0f,
 
-           // Top face normal points in positive Y direction
-           0.0f,  1.0f, 0.0f,
-           0.0f,  1.0f, 0.0f,
-           0.0f,  1.0f, 0.0f,
-           0.0f,  1.0f, 0.0f,
-           0.0f,  1.0f, 0.0f,
-           0.0f,  1.0f, 0.0f
-        };
+            // Top face normal points in positive Y direction
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f};
 
         float uvs[] = {
             // Back face
-            0.0f, 0.0f,  // Vertex 1
-            1.0f, 0.0f,  // Vertex 2
-            1.0f, 1.0f,  // Vertex 3
-            1.0f, 1.0f,  // Vertex 4
-            0.0f, 1.0f,  // Vertex 5
-            0.0f, 0.0f,  // Vertex 6
+            0.0f, 0.0f, // Vertex 1
+            1.0f, 0.0f, // Vertex 2
+            1.0f, 1.0f, // Vertex 3
+            1.0f, 1.0f, // Vertex 4
+            0.0f, 1.0f, // Vertex 5
+            0.0f, 0.0f, // Vertex 6
 
             // Front face
-            0.0f, 0.0f,  // Vertex 7
-            1.0f, 0.0f,  // Vertex 8
-            1.0f, 1.0f,  // Vertex 9
-            1.0f, 1.0f,  // Vertex 10
-            0.0f, 1.0f,  // Vertex 11
-            0.0f, 0.0f,  // Vertex 12
+            0.0f, 0.0f, // Vertex 7
+            1.0f, 0.0f, // Vertex 8
+            1.0f, 1.0f, // Vertex 9
+            1.0f, 1.0f, // Vertex 10
+            0.0f, 1.0f, // Vertex 11
+            0.0f, 0.0f, // Vertex 12
 
             // Left face
-            0.0f, 0.0f,  // Vertex 13
-            1.0f, 0.0f,  // Vertex 14
-            1.0f, 1.0f,  // Vertex 15
-            1.0f, 1.0f,  // Vertex 16
-            0.0f, 1.0f,  // Vertex 17
-            0.0f, 0.0f,  // Vertex 18
+            0.0f, 0.0f, // Vertex 13
+            1.0f, 0.0f, // Vertex 14
+            1.0f, 1.0f, // Vertex 15
+            1.0f, 1.0f, // Vertex 16
+            0.0f, 1.0f, // Vertex 17
+            0.0f, 0.0f, // Vertex 18
 
             // Right face
-            0.0f, 0.0f,  // Vertex 19
-            1.0f, 0.0f,  // Vertex 20
-            1.0f, 1.0f,  // Vertex 21
-            1.0f, 1.0f,  // Vertex 22
-            0.0f, 1.0f,  // Vertex 23
-            0.0f, 0.0f,  // Vertex 24
+            0.0f, 0.0f, // Vertex 19
+            1.0f, 0.0f, // Vertex 20
+            1.0f, 1.0f, // Vertex 21
+            1.0f, 1.0f, // Vertex 22
+            0.0f, 1.0f, // Vertex 23
+            0.0f, 0.0f, // Vertex 24
 
             // Bottom face
-            0.0f, 0.0f,  // Vertex 25
-            1.0f, 0.0f,  // Vertex 26
-            1.0f, 1.0f,  // Vertex 27
-            1.0f, 1.0f,  // Vertex 28
-            0.0f, 1.0f,  // Vertex 29
-            0.0f, 0.0f,  // Vertex 30
+            0.0f, 0.0f, // Vertex 25
+            1.0f, 0.0f, // Vertex 26
+            1.0f, 1.0f, // Vertex 27
+            1.0f, 1.0f, // Vertex 28
+            0.0f, 1.0f, // Vertex 29
+            0.0f, 0.0f, // Vertex 30
 
             // Top face
-            0.0f, 0.0f,  // Vertex 31
-            1.0f, 0.0f,  // Vertex 32
-            1.0f, 1.0f,  // Vertex 33
-            1.0f, 1.0f,  // Vertex 34
-            0.0f, 1.0f,  // Vertex 35
-            0.0f, 0.0f   // Vertex 36
+            0.0f, 0.0f, // Vertex 31
+            1.0f, 0.0f, // Vertex 32
+            1.0f, 1.0f, // Vertex 33
+            1.0f, 1.0f, // Vertex 34
+            0.0f, 1.0f, // Vertex 35
+            0.0f, 0.0f  // Vertex 36
         };
 
         // Define color (one color per cube, use same color for all vertices)
         float colors[] = {
             // Color per cube (same color for all vertices)
-            1.0f, 0.0f, 0.0f,  // Vertex 1
-            1.0f, 0.0f, 0.0f,  // Vertex 2
-            1.0f, 0.0f, 0.0f,  // Vertex 3
-            1.0f, 0.0f, 0.0f,  // Vertex 4
-            1.0f, 0.0f, 0.0f,  // Vertex 5
-            1.0f, 0.0f, 0.0f,  // Vertex 6
+            1.0f, 0.0f, 0.0f, // Vertex 1
+            1.0f, 0.0f, 0.0f, // Vertex 2
+            1.0f, 0.0f, 0.0f, // Vertex 3
+            1.0f, 0.0f, 0.0f, // Vertex 4
+            1.0f, 0.0f, 0.0f, // Vertex 5
+            1.0f, 0.0f, 0.0f, // Vertex 6
 
-            1.0f, 0.0f, 0.0f,  // Vertex 7
-            1.0f, 0.0f, 0.0f,  // Vertex 8
-            1.0f, 0.0f, 0.0f,  // Vertex 9
-            1.0f, 0.0f, 0.0f,  // Vertex 10
-            1.0f, 0.0f, 0.0f,  // Vertex 11
-            1.0f, 0.0f, 0.0f,  // Vertex 12
+            1.0f, 0.0f, 0.0f, // Vertex 7
+            1.0f, 0.0f, 0.0f, // Vertex 8
+            1.0f, 0.0f, 0.0f, // Vertex 9
+            1.0f, 0.0f, 0.0f, // Vertex 10
+            1.0f, 0.0f, 0.0f, // Vertex 11
+            1.0f, 0.0f, 0.0f, // Vertex 12
 
-            1.0f, 0.0f, 0.0f,  // Vertex 13
-            1.0f, 0.0f, 0.0f,  // Vertex 14
-            1.0f, 0.0f, 0.0f,  // Vertex 15
-            1.0f, 0.0f, 0.0f,  // Vertex 16
-            1.0f, 0.0f, 0.0f,  // Vertex 17
-            1.0f, 0.0f, 0.0f,  // Vertex 18
+            1.0f, 0.0f, 0.0f, // Vertex 13
+            1.0f, 0.0f, 0.0f, // Vertex 14
+            1.0f, 0.0f, 0.0f, // Vertex 15
+            1.0f, 0.0f, 0.0f, // Vertex 16
+            1.0f, 0.0f, 0.0f, // Vertex 17
+            1.0f, 0.0f, 0.0f, // Vertex 18
 
-            1.0f, 0.0f, 0.0f,  // Vertex 19
-            1.0f, 0.0f, 0.0f,  // Vertex 20
-            1.0f, 0.0f, 0.0f,  // Vertex 21
-            1.0f, 0.0f, 0.0f,  // Vertex 22
-            1.0f, 0.0f, 0.0f,  // Vertex 23
-            1.0f, 0.0f, 0.0f,  // Vertex 24
+            1.0f, 0.0f, 0.0f, // Vertex 19
+            1.0f, 0.0f, 0.0f, // Vertex 20
+            1.0f, 0.0f, 0.0f, // Vertex 21
+            1.0f, 0.0f, 0.0f, // Vertex 22
+            1.0f, 0.0f, 0.0f, // Vertex 23
+            1.0f, 0.0f, 0.0f, // Vertex 24
 
-            1.0f, 0.0f, 0.0f,  // Vertex 25
-            1.0f, 0.0f, 0.0f,  // Vertex 26
-            1.0f, 0.0f, 0.0f,  // Vertex 27
-            1.0f, 0.0f, 0.0f,  // Vertex 28
-            1.0f, 0.0f, 0.0f,  // Vertex 29
-            1.0f, 0.0f, 0.0f,  // Vertex 30
+            1.0f, 0.0f, 0.0f, // Vertex 25
+            1.0f, 0.0f, 0.0f, // Vertex 26
+            1.0f, 0.0f, 0.0f, // Vertex 27
+            1.0f, 0.0f, 0.0f, // Vertex 28
+            1.0f, 0.0f, 0.0f, // Vertex 29
+            1.0f, 0.0f, 0.0f, // Vertex 30
 
-            1.0f, 0.0f, 0.0f,  // Vertex 31
-            1.0f, 0.0f, 0.0f,  // Vertex 32
-            1.0f, 0.0f, 0.0f,  // Vertex 33
-            1.0f, 0.0f, 0.0f,  // Vertex 34
-            1.0f, 0.0f, 0.0f,  // Vertex 35
-            1.0f, 0.0f, 0.0f   // Vertex 36
+            1.0f, 0.0f, 0.0f, // Vertex 31
+            1.0f, 0.0f, 0.0f, // Vertex 32
+            1.0f, 0.0f, 0.0f, // Vertex 33
+            1.0f, 0.0f, 0.0f, // Vertex 34
+            1.0f, 0.0f, 0.0f, // Vertex 35
+            1.0f, 0.0f, 0.0f  // Vertex 36
         };
 
         float offsets[] = {
@@ -446,7 +445,6 @@ void prepareCube()
             0.0f, 0.0f, 0.0f  // Vertex 36
         };
 
-
         // ----- VBO CREATION -----
         GLuint positionVBO, normalVBO, uvVBO, colorVBO, offsetVBO;
 
@@ -484,30 +482,30 @@ void prepareCube()
         // Positions (location = 0)
         glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 
         // Normals (location = 1)
         glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 
         // UVs (location = 2)
         glBindBuffer(GL_ARRAY_BUFFER, uvVBO);
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0);
 
         // Colors (location = 3)
         glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 
         // Offsets (location = 4)
         glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
         glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind VBO
-        glBindVertexArray(0); // Unbind VAO
+        glBindVertexArray(0);             // Unbind VAO
     }
 }
 
