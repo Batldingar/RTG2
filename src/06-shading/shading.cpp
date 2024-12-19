@@ -14,7 +14,7 @@
 #include <util/model.h>
 #include <util/window.h>
 
-constexpr int vertexCount = 36;
+constexpr int vertexCount = 36; // per cube that is
 constexpr int colorComponentsPerVertex = 3;
 constexpr int offsetComponentsPerVertex = 3;
 
@@ -28,7 +28,7 @@ void renderCubes();
 int WIDTH = 800;
 int HEIGHT = 600;
 
-vec3 cameraPos = vec3(0.0f, 0.0f, 0.75f);
+vec3 cameraPos;
 vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
 vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
 
@@ -76,6 +76,8 @@ int main()
     myShader.use();
 
     prepareCubes();
+
+    cameraPos = vec3(20, 20, 40);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -350,9 +352,9 @@ void prepareCubes()
             float colors[vertexCount * colorComponentsPerVertex] = {};
 
             // Calculate the RGB values from the image
-            unsigned char r = image[i * 3];     // Red channel
-            unsigned char g = image[i * 3 + 1]; // Green channel
-            unsigned char b = image[i * 3 + 2]; // Blue channel
+            unsigned char r = image[i * colorComponentsPerVertex];     // Red channel
+            unsigned char g = image[i * colorComponentsPerVertex + 1]; // Green channel
+            unsigned char b = image[i * colorComponentsPerVertex + 2]; // Blue channel
 
             for (int i = 0; i < vertexCount; ++i) {
                 colors[i * colorComponentsPerVertex] = r / 255.0f;
@@ -363,8 +365,8 @@ void prepareCubes()
             float offsets[vertexCount * offsetComponentsPerVertex] = {};
 
             // Create the offset array
-            float xOffset = (float)(i % width) * 3.0f;  // Get the remainder as a float
-            float yOffset = (float)(i / width) * 3.0f; // Integer division gives the row number, cast to float
+            float xOffset = (float)(i % width) * 2.0f;
+            float yOffset = (float)(i / width) * 2.0f;
             float zOffset = 0.0f;
 
             for (int i = 0; i < vertexCount; ++i) {
