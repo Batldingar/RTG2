@@ -29,6 +29,8 @@ void renderCubes();
 int WIDTH = 800;
 int HEIGHT = 600;
 
+int DISTANCE_BETWEEN_CUBES = 1;
+
 vec3 cameraPos;
 vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
 vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
@@ -81,7 +83,7 @@ int main()
 
 	prepareCubes();
 
-	cameraPos = vec3(20, 20, 40);
+	cameraPos = vec3(30, 30, 60);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -144,6 +146,7 @@ int main()
 		myShader.setVec3("lightPos", lightPos);
 
 		myShader.setVec2("mousePos", mousePos);
+		myShader.setFloat("time", currentFrame);
 
 		renderCubes();
 
@@ -371,8 +374,8 @@ void prepareCubes()
 		float offsets[vertexCount * offsetComponentsPerVertex] = {};
 
 		// Create the offset array
-		float xOffset = (float)(i % width) * 2.0f;
-		float yOffset = (float)(i / width) * 2.0f;
+		float xOffset = (float)(i % width) * (2.0f + DISTANCE_BETWEEN_CUBES);
+		float yOffset = (float)(i / width) * (2.0f + DISTANCE_BETWEEN_CUBES);
 		float zOffset = 0.0f;
 
 		for (int i = 0; i < vertexCount; ++i) {

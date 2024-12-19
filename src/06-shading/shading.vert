@@ -13,7 +13,9 @@ out vec3 vColor;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+
 uniform vec2 mousePos;
+uniform float time;
 
 void main()
 {
@@ -31,10 +33,14 @@ void main()
 	// ...and to normalized device coordinates so that it matches the mouse pos space
     vec2 fragPositionNDC = clipSpacePosition.xy / clipSpacePosition.w;
 
-    // Check distance to mouse position in NDC space
-    if (distance(mousePos, fragPositionNDC) < 0.05) { // Adjust threshold as needed
-        finalDestination.z += 100; // Move the vertex slightly along z-axis
-    }
+    // Calculate distance between vertex and mouse position in NDC space and move the vertex along z-axis based on time
+    float frequencyBoost = 20; // changes wave length
+    float vertexMouseDistance = distance(mousePos, fragPositionNDC);
+    float speed = 2; // changes wave speed
+    float timeBasedDistance = vertexMouseDistance * frequencyBoost - time * speed;
+    float waveFriction = 75; // decreases wave amplitude with distance
+    float amplitude = max(50 - vertexMouseDistance * waveFriction, 0); // changes wave height
+    finalDestination.z += abs(sin(timeBasedDistance) * amplitude);
 
     // Actual final vertex position
     gl_Position = projection * view * model * vec4(finalDestination, 1.0);
